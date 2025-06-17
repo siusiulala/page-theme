@@ -1,27 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
 
-{% include head.html %}
+{%- include head.html -%}
 
-<body>
+<body class="{% if site.darkmode == true and site.darkmode != 'never' %}dark{% endif %}">
 
-  {% if page.title == "Home" %}{% include particles-home.html %}{% endif %}
-  {% if page.title == "404" %}{% include particles-404.html %}{% endif %}
+  {%- include header.html -%}
 
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col col-sm-10 col-md-8 col-lg-6">
-        {{ content }}
-      </div>
+  <main class="page-content" aria-label="Content">
+    <div class="wrapper">
+
+      {%- if jekyll.environment == 'production' and site.gtm -%}
+        {%- include gtm_body.html -%}
+      {%- endif -%}
+
+      {%- include about.html -%}
+
+      {%- if site.version == 2 -%}
+        {% for section in site.content %}
+          <div class="container {{ section.layout }}-container">
+            <h3 id="{{ section.title | slugify }}">{{ section.title }}</h3>
+            {% include {{ section.layout | prepend: "section-" | append: ".html" }} content=section.content %}
+          </div>
+        {% endfor %}
+      {% else %}
+        {%- include v1/default.html -%}
+      {%- endif -%}
     </div>
-  </div>
-  <script src="{{ '/assets/js/bootstrap.min.js' | prepend: site.url }}"></script>
-  {% if page.title != "404" %}
-  <script src="{{ '/assets/js/darkmode.js' | prepend: site.url }}"></script>
-  {% endif %}
-  {% if page.title == "Home" or page.title == "404" %}
-  <script src="assets/js/particles.min.js"></script>
-  <script src="assets/js/main.js"></script>
+  </main>
+
+  {%- include footer.html -%}
+  {% if site.darkmode == false %}
+    <script src="{{ '/assets/js/index.js' | relative_url }}"></script>
   {% endif %}
 </body>
 

@@ -1,4 +1,9 @@
-<footer>
-  <small>&copy; <time datetime="{{ site.time | date_to_xmlschema }}">{{ site.time | date: '%Y' }}</time>
-    {{ site.author.name }}. All rights reserved.</small>
-</footer>
+<div class="container footer-container">
+  <p>
+    {{ site.name | escape }} -
+    <a href="mailto:{{ site.email }}" target="_blank">{{ site.email | escape }}</a>
+    {%- if site.footer_show_references -%}
+      &nbsp;- {{ site.references_title | default: "References on request" }}
+    {%- endif -%}
+  </p>
+</div>
